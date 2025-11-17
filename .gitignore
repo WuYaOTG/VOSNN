@@ -1,6 +1,6 @@
-.prj
-.log
-.xo
+*.prj
+*.log
+*.xo
 hls_cosim.prj/
 hls_csim.prj/
 
