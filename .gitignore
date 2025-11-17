@@ -1,0 +1,16 @@
+.prj
+hls_cosim.prj/
+hls_csim.prj/
+
+hlsKernel/build_temp/
+hlsKernel/build_temp/
+hlsKernel/.ipcache/
+hlsKernel/.Xil/
+hlsKernel/output/
+hlsKernel/report/
+
+host/build_temp/
+
+*.vhdl
+*.dcp
+*.v
