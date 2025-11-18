@@ -116,7 +116,7 @@ DEBUG_TIME("Finish software building DSVS_Octree with reference points " << KNN_
     }
 
 TIMER_START(2);
-    My_PointXYZI_HW result_hw[k_query_set_size];
+    My_PointXYZI_HW result_hw[k_query_set_size * K];
 
     Ds_Oc_KNN_search_hw(result_hw, q_ordered_set, q_set_start_index, q_flag, depN_set_hw, 
         Oc_voxel_flag, Oc_voxel_first_index, KNN_query_set_size,
@@ -126,46 +126,46 @@ TIMER_START(2);
 TIMER_STOP_ID(2);
 DEBUG_TIME("Finish search DSVS with query points " << KNN_query_set_size << " with " << TIMER_REPORT_MS(2) << " ms !" );
 
-// // 暴力搜索~~~~！！！！我突然发现我好像不能这么比，因为我是类型转换的，所以下面也得用类型转换的数据比较
-//     My_PointXYZI bf_KNN_query_result[KNN_query_set_size];
-//     brute_force_search(q_ordered_set, KNN_query_set_size, KNN_reference_set, KNN_reference_set_size, bf_KNN_query_result);
+// 暴力搜索
+    My_PointXYZI bf_KNN_query_result[KNN_query_set_size];
+    brute_force_search(q_ordered_set, KNN_query_set_size, KNN_reference_set, KNN_reference_set_size, bf_KNN_query_result);
 
-//     My_PointXYZI result[k_query_set_size];
-//     for(int i = 0; i < k_query_set_size; i++)
-//     {
-//         My_PointXYZI temp;
-//         temp.x = (float)result_hw[i].x;
-//         temp.y = (float)result_hw[i].y;
-//         temp.z = (float)result_hw[i].z;
-//         result[i] = temp;
-//     }
+    My_PointXYZI result[k_query_set_size * K];
+    for(int i = 0; i < k_query_set_size; i++)
+    {
+        My_PointXYZI temp;
+        temp.x = (float)result_hw[i].x;
+        temp.y = (float)result_hw[i].y;
+        temp.z = (float)result_hw[i].z;
+        result[i] = temp;
+    }
 
-//     /********************************************** 4. KNN 结果比较 *******************************************************/
-//     int error_count = 0;
-//     float NN_true_ratio;
-// // 比较结果
-//     compare_result(q_ordered_set, KNN_query_set_size, result, bf_KNN_query_result, error_count);
-//     DEBUG_LOG("image_KNN VS brute-force: " << ", error_count: " << error_count << " with true ratio = " << float(1-(float)error_count/(float)KNN_query_set_size));
+    /********************************************** 4. KNN 结果比较 *******************************************************/
+    int error_count = 0;
+    float NN_true_ratio;
+// 比较结果
+    compare_result(q_ordered_set, KNN_query_set_size, result, bf_KNN_query_result, error_count);
+    DEBUG_LOG("image_KNN VS brute-force: " << ", error_count: " << error_count << " with true ratio = " << float(1-(float)error_count/(float)KNN_query_set_size));
 
-//     NN_true_ratio = float(1-(float)error_count/(float)KNN_query_set_size);
+    NN_true_ratio = float(1-(float)error_count/(float)KNN_query_set_size);
 
-//      /********************************************** 5. 验证结果 *******************************************************/
-//      if (NN_true_ratio < 0.01)
-//      {
-//          DEBUG_INFO("NN_true_ratio : " << NN_true_ratio);
-//          fprintf(stdout, "*******************************************\n");
-//          fprintf(stdout, "FAIL: Output DOES NOT match the golden output\n");
-//          fprintf(stdout, "*******************************************\n");
-//          return 1;
-//      } 
-//      else 
-//      {
-//          DEBUG_INFO("NN_true_ratio: " << NN_true_ratio);
-//          fprintf(stdout, "*******************************************\n");
-//          fprintf(stdout, "PASS: The output matches the golden output!\n");
-//          fprintf(stdout, "*******************************************\n");
-//          return 0;
-//      }
+     /********************************************** 5. 验证结果 *******************************************************/
+     if (NN_true_ratio < 0.01)
+     {
+         DEBUG_INFO("NN_true_ratio : " << NN_true_ratio);
+         fprintf(stdout, "*******************************************\n");
+         fprintf(stdout, "FAIL: Output DOES NOT match the golden output\n");
+         fprintf(stdout, "*******************************************\n");
+         return 1;
+     } 
+     else 
+     {
+         DEBUG_INFO("NN_true_ratio: " << NN_true_ratio);
+         fprintf(stdout, "*******************************************\n");
+         fprintf(stdout, "PASS: The output matches the golden output!\n");
+         fprintf(stdout, "*******************************************\n");
+         return 0;
+     }
 
 
 }

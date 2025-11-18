@@ -277,6 +277,12 @@ void KNN_search_hw(My_PointXYZI_HW* result, hls::stream<My_PointXYZI_HW>& candid
         voxel_int nearest_index = (candidate_res0 < candidate_res1) ? index[0] : index[63];
         result[i] = candidate_buffer[nearest_index];
 
+        // for(int j = 0; j < K; j++)
+        // {
+        //     voxel_int nearest_index[j] = index[j];
+        //     result[i*K + j] = candidate_buffer[nearest_index[j]];
+        // }
+
     }
 }
 
